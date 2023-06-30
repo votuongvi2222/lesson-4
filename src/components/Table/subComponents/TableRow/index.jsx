@@ -5,10 +5,10 @@ const TableRow = (props) => {
     return (
         <>
             {
-                data.map((row, index) => 
-                    <tr key={index}>
+                data.map((row, rowIndex) => 
+                    <tr key={rowIndex}>
                         {
-                            columns.map((column, colIndex) => <TableCell colIndex={colIndex} column={column} row={row}/>)
+                            columns.map((column, colIndex) => <TableCell rowIndex={rowIndex} colIndex={colIndex} column={column} row={row}/>)
                         }
                     </tr>
                 )

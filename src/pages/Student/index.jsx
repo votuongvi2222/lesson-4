@@ -1,92 +1,139 @@
-import Table from "../../components/Table"
-
+import MyTable from "../../components/Table"
+import AddStudent from "./subComponents/AddStudent"
+import { useState } from "react"
+import { Button } from 'react-bootstrap';
 const defaultData = [
     {
-        index: 1,
         id: 'std1',
         fullName: 'Nguyen Van A',
         address: 'Hai Thuong Lang Ong',
-        age: 18,
-        sex: 'female'
+        age: 20,
+        sex: 1
     },
     {
-        index: 2,
         id: 'std2',
-        fullName: 'Nguyen Van A',
+        fullName: 'Nguyen Van B',
         age: 18,
         address: 'Hai Thuong Lang Ong',
-        sex: 'male'
+        sex: 0
     },
     {
-        index: 3,
         id: 'std3',
-        fullName: 'Nguyen Van A',
+        fullName: 'Nguyen Van C',
         age: 18,
         address: 'Hai Thuong Lang Ong',
-        sex: 'female'
+        sex: 1
     },
     {
-        index: 4,
         id: 'std4',
-        fullName: 'Nguyen Van A',
-        age: 18,
+        fullName: 'Nguyen Van D',
+        age: 17,
         address: 'Hai Thuong Lang Ong',
-        sex: 'male'
+        sex: 1
     },
 ]
 
 const Student = () => {
-
+    const [students, setStudents] = useState(defaultData)
     
     const columns = [
         {
             title: 'STT',
-            dataIndex: 'index',
-            width: 100,
+            width: 50,
+            render: (row, value, index) => {
+                return index + 1;
+            }
         },
         {
-            title: 'Ho va ten',
+            title: 'Họ và tên',
             dataIndex: 'fullName',
             width: 200,
+            sortable: true,
             render: (_, value) => {
 
                 return <b>{value}</b>
             }
         },
         {
-            title: 'Ma hoc sinh',
+            title: 'Mã học sinh',
             dataIndex: 'id',
-            width: 100,
+            width: 200,
+            sortable: true,
         },
         {
-            title: 'Tuoi',
+            title: 'Tuổi',
             dataIndex: 'age',
             width: 100,
+            sortable: true,
         },
         {
-            title: 'Dia chi',
+            title: 'Địa chỉ',
             dataIndex: 'address',
-            width: 300,
+            width: 400,
+            sortable: true,
         },
         {
-            title: 'Gioi tinh',
+            title: 'Giới tính',
             dataIndex: 'sex',
             width: 100,
+            sortable: true,
             render: (_, value) => {
-                return value === 'female' ? <div style={{color: 'red'}}>{value}</div> : <div style={{color: 'green'}}>{value}</div>
+                let sexStr = null, color = null;
+                if (value === 1) {
+                    sexStr = 'Nữ';
+                    color = 'green'
+                } else {
+                    sexStr = 'Nam';
+                    color = 'blue';
+                }
+                return <div style={{color}}>{sexStr}</div>
             }
         },
         {
-            title: 'Thao tac',
-            width: 300,
+            title: 'Thao tác',
+            width: 200,
+            sortable: false,
             render: (row, _) => {
-                return <button>Edit</button>
+                return [
+                    <Button variant="danger">Xóa</Button>,
+                    <>{' '}</>,
+                    <Button variant="warning">Sửa</Button>,
+                ]
             }
         }
     ]
 
+    const handleAddStudent = (student) => {
+        setStudents([...students, student])
+    }
+
+    const handleSorting = (sortField, sortOrder) => {
+        if (sortField) {
+            const sorted = [...students].sort((a, b) => {
+                if (a[sortField] === null) return 1;
+                if (b[sortField] === null) return -1;
+                if (a[sortField] === null && b[sortField] === null) return 0;
+                return (
+                    a[sortField].toString().localeCompare(b[sortField].toString(), "vi", {
+                        numeric: true,
+                    }) * (sortOrder === "asc" ? 1 : -1)
+                );
+            });
+            setStudents(sorted);
+        }
+    };
+
     return (
-        <Table columns={columns} data={defaultData} />
+        <div className="container" style={{paddingTop: 20}}>
+            <h2>Quản lý học sinh</h2>
+            <AddStudent onAdd={handleAddStudent}/>
+            {' '}
+            <Button variant="primary" style={{textAlign: 'right', float: 'right', marginBottom: 30, marginRight: 5}}>
+                Sắp xếp
+            </Button>
+            <br />
+            <MyTable columns={columns} data={students} handleSorting={handleSorting} />
+        </div>
     )
 }
 

@@ -3,11 +3,11 @@ import TableRow from './subComponents/TableRow';
 import './style.css';
 const Table = (props) => {
 
-    const {columns, data} = props;
+    const {columns, data, handleSorting} = props;
     return (
         <table>
             <thead>
-                <TableHeader columns={columns} />
+                <TableHeader columns={columns}  handleSorting={handleSorting}/>
             </thead>
             <tbody>
                 <TableRow columns={columns} data={data}/>
