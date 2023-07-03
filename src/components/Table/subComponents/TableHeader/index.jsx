@@ -1,15 +1,15 @@
 import { useState } from 'react';
 const TableHeader = (props) => {
     const {columns, handleSorting } = props;
-    const [sortField, setSortField] = useState("");
-    const [order, setOrder] = useState("asc");
-    const handleSortingChange = (accessor) => {
-        const sortOrder = accessor === sortField && order === "asc" ? "desc" : "asc";
-        setSortField(accessor);
-        setOrder(sortOrder);
-        handleSorting(accessor, sortOrder);
-    };
-    
+    const [field, setField] = useState(null);
+    const [order, setOrder] = useState('asc');
+
+    const handleFieldClick = (dataIndex) => {
+        const nextOrder = field === dataIndex && order === 'asc' ? 'desc' : 'asc';
+        setOrder(nextOrder);
+        setField(dataIndex);
+        handleSorting(dataIndex, nextOrder)
+    }
     return (
         <tr>
             {
@@ -17,9 +17,9 @@ const TableHeader = (props) => {
                     return <th 
                         style={{width: column.width}}
                         key={index}
-                        onClick={column.sortable ? () => handleSortingChange(column.dataIndex) : null}
+                        onClick={column.sortable ? () => handleFieldClick(column.dataIndex) : null}
                     >
-                        {column.title}
+                        {column.title} 
                     </th>
                 })
             }

@@ -1,7 +1,8 @@
 import MyTable from "../../components/Table"
 import AddStudent from "./subComponents/AddStudent"
-import { useState } from "react"
-import { Button } from 'react-bootstrap';
+import DeleteStudent from "./subComponents/DeleteStudent";
+import UpdateStudent from "./subComponents/UpdateStudent"
+import { useEffect, useState } from "react"
 const defaultData = [
     {
         id: 'std1',
@@ -40,6 +41,7 @@ const Student = () => {
         {
             title: 'STT',
             width: 50,
+            sortable: false,
             render: (row, value, index) => {
                 return index + 1;
             }
@@ -95,24 +97,32 @@ const Student = () => {
             sortable: false,
             render: (row, _) => {
                 return [
-                    <Button variant="danger">Xóa</Button>,
+                    <DeleteStudent onDelete={handleDeleteStudent}  row={row}/>,
                     <>{' '}</>,
-                    <Button variant="warning">Sửa</Button>,
+                    <UpdateStudent onUpdate={handleUpdateStudent}  row={row}/>
                 ]
             }
         }
     ]
 
     const handleAddStudent = (student) => {
+        student.sex = student.sex ? student.sex : 1;
         setStudents([...students, student])
+    }
+
+    const handleUpdateStudent = (student) => {
+        const _updatedStudents = [...students].map(std => std.id === student.id ? student : std);
+        setStudents(_updatedStudents)
+    }
+
+    const handleDeleteStudent = (id) => {
+        const _updatedStudents = [...students].filter(std => std.id !== id);
+        setStudents(_updatedStudents)
     }
 
     const handleSorting = (sortField, sortOrder) => {
         if (sortField) {
             const sorted = [...students].sort((a, b) => {
-                if (a[sortField] === null) return 1;
-                if (b[sortField] === null) return -1;
-                if (a[sortField] === null && b[sortField] === null) return 0;
                 return (
                     a[sortField].toString().localeCompare(b[sortField].toString(), "vi", {
                         numeric: true,
@@ -123,15 +133,15 @@ const Student = () => {
         }
     };
 
+    useEffect(() => {
+
+    }, [students]);
+
     return (
         <div className="container" style={{paddingTop: 20}}>
             <h2>Quản lý học sinh</h2>
+
             <AddStudent onAdd={handleAddStudent}/>
-            {' '}
-            <Button variant="primary" style={{textAlign: 'right', float: 'right', marginBottom: 30, marginRight: 5}}>
-                Sắp xếp
-            </Button>
-            <br />
             <MyTable columns={columns} data={students} handleSorting={handleSorting} />
         </div>
     )
