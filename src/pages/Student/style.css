@@ -35,3 +35,9 @@ button.backToTopBtn:hover {
 .dark table tr:nth-child(even) {
     background-color: grey;
 }
+
+.dark #themeBtn {
+    background-color: rgb(52, 52, 52);
+    border: none;
+    color: white;
+}

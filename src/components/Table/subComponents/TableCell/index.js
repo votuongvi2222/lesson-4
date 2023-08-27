@@ -1,5 +1,4 @@
-const TableCell = (props) => {
-    const {column, row, colIndex, rowIndex} = props;
+const TableCell = ( {column, row, colIndex, rowIndex}) => {
 
     const value = column.dataIndex ? row[column.dataIndex] : null;
     return (

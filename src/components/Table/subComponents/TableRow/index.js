@@ -1,7 +1,6 @@
 import TableCell from "../TableCell";
 
-const TableRow = (props) => {
-    const {columns, data} = props;
+const TableRow = ({columns, data}) => {
     return (
         <>
             {
