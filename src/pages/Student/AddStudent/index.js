@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Form, Button, Modal, Row, Col } from 'react-bootstrap';
-const AddStudent = (props) => {
+const AddStudent = () => {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
